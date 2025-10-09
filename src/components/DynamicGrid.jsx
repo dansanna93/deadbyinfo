@@ -9,6 +9,43 @@ const DynamicGrid = ({ elements }) => {
   const API_URL = '/api/';
   const [items, setItems] = useState([]);
   const [iconPath, setIconPath] = useState('');
+  const routeMap = {
+    killers: '/killers/',
+    survivors: '/survivors/',
+    killerperks: '/killer-perks/',
+    survivorperks: '/survivor-perks/',
+    maps: '/maps/',
+  };
+
+  const substituteTunables = (description, tunables) => {
+    let flatTunables = [];
+    if (Array.isArray(tunables)) {
+      if (typeof description !== 'string') return '';
+      flatTunables = tunables.reduce((acc, val) => acc.concat(val), []);
+    }
+    return description.replace(
+      /\{(\d+)\}/g,
+      (_, idx) => flatTunables[idx] ?? `{${idx}}`
+    );
+  };
+
+  const stateMap = {
+    killers: (item) => ({
+      characterUrl: 'characterinfo?character=' + item.id + '&includeperks',
+    }),
+    survivors: (item) => ({
+      characterUrl: 'characterinfo?character=' + item.id + '&includeperks',
+    }),
+    killerperks: (item) => ({
+      perkName: item.name,
+      perkDescription: substituteTunables(item.description, item.tunables),
+    }),
+    survivorperks: (item) => ({
+      perkName: item.name,
+      perkDescription: substituteTunables(item.description, item.tunables),
+    }),
+    maps: (item) => ({}),
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -22,10 +59,10 @@ const DynamicGrid = ({ elements }) => {
           apiUrl = API_URL + 'characters?role=survivor';
           setIconPath('/images/surv-icons/');
           break;
-        case 'killer-perks':
+        case 'killerperks':
           apiUrl = API_URL + 'perks?role=killer';
           break;
-        case 'survivor-perks':
+        case 'survivorperks':
           apiUrl = API_URL + 'perks?role=survivor';
           break;
         case 'maps':
@@ -36,7 +73,7 @@ const DynamicGrid = ({ elements }) => {
       try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        console.log(data);
+        console.log(Object.keys(data));
         const itemsArray = Object.values(data);
         setItems(itemsArray);
       } catch (error) {
@@ -58,20 +95,9 @@ const DynamicGrid = ({ elements }) => {
             {items.map((item, idx) => (
               <Col key={idx} md={3} className="mb-4">
                 <NavLink
-                  to={
-                    elements === 'killers'
-                      ? '/killers/' + item.name
-                      : '/survivors/' + item.name
-                  }
+                  to={routeMap[elements] + item.name}
                   style={{ textDecoration: 'none' }}
-                  state={{
-                    characterUrl:
-                      'characterinfo?character=' + item.id + '&includeperks',
-                    icon:
-                      item.name === 'William "Bill" Overbeck'
-                        ? +iconPath + 'William Bill Overbeck.png'
-                        : +iconPath + item.name + '.png',
-                  }}
+                  state={stateMap[elements] ? stateMap[elements](item) : {}}
                 >
                   <ElementCard
                     title={item.name}

@@ -4,7 +4,10 @@ import { Card } from 'react-bootstrap';
 const ElementCard = ({ title, icon }) => {
   return (
     <>
-      <Card style={{ width: '18rem' }} className="bg-dark text-light">
+      <Card
+        style={{ width: '18rem', height: '25rem' }}
+        className="bg-dark text-light"
+      >
         <Card.Img variant="top" src={icon} />
         <Card.Body>
           <Card.Title>{title}</Card.Title>

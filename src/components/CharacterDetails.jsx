@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import ElementCard from './ElementCard';
 import MySpinner from './MySpinner';
 
-const CharacterGrid = ({ type }) => {
+const CharacterDetails = ({ type }) => {
   const API_URL = '/api/';
   const location = useLocation();
   const { characterUrl } = location.state || {};
@@ -77,4 +77,4 @@ const CharacterGrid = ({ type }) => {
   );
 };
 
-export default CharacterGrid;
+export default CharacterDetails;

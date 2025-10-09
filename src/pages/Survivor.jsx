@@ -1,10 +1,10 @@
 import React from 'react';
-import CharacterGrid from '../components/CharacterGrid';
+import CharacterDetails from '../components/CharacterDetails';
 
 const Survivor = () => {
   return (
     <>
-      <CharacterGrid type="survivor" />
+      <CharacterDetails type="survivor" />
     </>
   );
 };
