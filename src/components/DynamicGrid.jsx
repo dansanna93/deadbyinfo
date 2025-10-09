@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { data, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ElementCard from './ElementCard';
+import MySpinner from './MySpinner';
 
 const DynamicGrid = ({ elements }) => {
   const API_URL = '/api/';
@@ -15,11 +16,11 @@ const DynamicGrid = ({ elements }) => {
       switch (elements) {
         case 'killers':
           apiUrl = API_URL + 'characters?role=killer';
-          setIconPath('images/killer-icons/');
+          setIconPath('/images/killer-icons/');
           break;
         case 'survivors':
           apiUrl = API_URL + 'characters?role=survivor';
-          setIconPath('images/surv-icons/');
+          setIconPath('/images/surv-icons/');
           break;
         case 'killer-perks':
           apiUrl = API_URL + 'perks?role=killer';
@@ -41,28 +42,51 @@ const DynamicGrid = ({ elements }) => {
       } catch (error) {
         console.log('Error fetching data', error);
       }
-      console.log(apiUrl);
     };
     fetchItems();
+    console.log(items);
   }, [elements]);
   return (
     <>
-      <Container>
-        <Row>
-          {items.map((item, idx) => (
-            <Col key={idx} md={3} className="mb-4">
-              <ElementCard
-                title={item.name}
-                icon={
-                  item.name === 'William "Bill" Overbeck'
-                    ? iconPath + 'William Bill Overbeck.png'
-                    : iconPath + item.name + '.png'
-                }
-              />
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      {items.length === 0 ? (
+        <div className="d-flex justify-content-center align-items-center mt-4">
+          <MySpinner />
+        </div>
+      ) : (
+        <Container>
+          <Row>
+            {items.map((item, idx) => (
+              <Col key={idx} md={3} className="mb-4">
+                <NavLink
+                  to={
+                    elements === 'killers'
+                      ? '/killers/' + item.name
+                      : '/survivors/' + item.name
+                  }
+                  style={{ textDecoration: 'none' }}
+                  state={{
+                    characterUrl:
+                      'characterinfo?character=' + item.id + '&includeperks',
+                    icon:
+                      item.name === 'William "Bill" Overbeck'
+                        ? +iconPath + 'William Bill Overbeck.png'
+                        : +iconPath + item.name + '.png',
+                  }}
+                >
+                  <ElementCard
+                    title={item.name}
+                    icon={
+                      item.name === 'William "Bill" Overbeck'
+                        ? iconPath + 'William Bill Overbeck.png'
+                        : iconPath + item.name + '.png'
+                    }
+                  />
+                </NavLink>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      )}
     </>
   );
 };

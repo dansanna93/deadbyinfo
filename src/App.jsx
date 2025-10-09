@@ -9,6 +9,8 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Killers from './pages/Killers';
 import Survivors from './pages/Survivors';
+import Killer from './pages/Killer';
+import Survivor from './pages/Survivor';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -17,6 +19,8 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/killers" element={<Killers />} />
         <Route path="/survivors" element={<Survivors />} />
+        <Route path="killers/*" element={<Killer />} />
+        <Route path="survivors/*" element={<Survivor />} />
       </Route>
     )
   );
