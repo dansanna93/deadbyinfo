@@ -18,6 +18,22 @@ const MyCarousel = () => {
       <Carousel.Item>
         <div className="d-flex justify-content-center">
           <img
+            src="/images/carousel/killer-surv-slide.jpg"
+            alt="Play!"
+            className="d-block"
+            style={{ width: '50%' }}
+          />
+        </div>
+        <Carousel.Caption>
+          <div style={captionStyle}>
+            <h3>Play now!</h3>
+            <p>Let the trial begin and remember: Death is not an escape.</p>
+          </div>
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <div className="d-flex justify-content-center">
+          <img
             src="/images/carousel/killer-slide.jpg"
             alt="Killer"
             className="d-block"
@@ -50,22 +66,6 @@ const MyCarousel = () => {
               As a survivor, your goal is to repair all the generators and open
               the exit gates to escape the trial!
             </p>
-          </div>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="d-flex justify-content-center">
-          <img
-            src="/images/carousel/killer-surv-slide.jpg"
-            alt="Play!"
-            className="d-block"
-            style={{ width: '50%' }}
-          />
-        </div>
-        <Carousel.Caption>
-          <div style={captionStyle}>
-            <h3>Play now!</h3>
-            <p>Let the trial begin and remember: Death is not an escape.</p>
           </div>
         </Carousel.Caption>
       </Carousel.Item>
