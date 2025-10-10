@@ -39,10 +39,12 @@ const DynamicGrid = ({ elements }) => {
     killerperks: (item) => ({
       perkName: item.name,
       perkDescription: substituteTunables(item.description, item.tunables),
+      imagePath: '/images/killer-perks/',
     }),
     survivorperks: (item) => ({
       perkName: item.name,
       perkDescription: substituteTunables(item.description, item.tunables),
+      imagePath: '/images/surv-perks/',
     }),
     maps: (item) => ({}),
   };
@@ -61,9 +63,11 @@ const DynamicGrid = ({ elements }) => {
           break;
         case 'killerperks':
           apiUrl = API_URL + 'perks?role=killer';
+          setIconPath('/images/killer-perks/');
           break;
         case 'survivorperks':
           apiUrl = API_URL + 'perks?role=survivor';
+          setIconPath('/images/surv-perks/');
           break;
         case 'maps':
           apiUrl = API_URL + 'maps';

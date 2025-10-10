@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import ElementCard from './ElementCard';
 import MySpinner from './MySpinner';
@@ -12,6 +12,31 @@ const CharacterDetails = ({ type }) => {
   const [iconPath, setIconPath] = useState('');
   const finalUrl = API_URL + characterUrl;
   console.log(finalUrl);
+
+  const substituteTunables = (description, tunables) => {
+    let flatTunables = [];
+    if (Array.isArray(tunables)) {
+      if (typeof description !== 'string') return '';
+      flatTunables = tunables.reduce((acc, val) => acc.concat(val), []);
+    }
+    return description.replace(
+      /\{(\d+)\}/g,
+      (_, idx) => flatTunables[idx] ?? `{${idx}}`
+    );
+  };
+
+  const stateMap = {
+    killer: (item) => ({
+      perkName: item.name,
+      perkDescription: substituteTunables(item.description, item.tunables),
+      imagePath: '/images/killer-perks/',
+    }),
+    survivor: (item) => ({
+      perkName: item.name,
+      perkDescription: substituteTunables(item.description, item.tunables),
+      imagePath: '/images/surv-perks/',
+    }),
+  };
 
   useEffect(() => {
     switch (type) {
@@ -67,7 +92,24 @@ const CharacterDetails = ({ type }) => {
           {character.perks
             ? character.perks.map((perk) => (
                 <Col key={perk.id}>
-                  <ElementCard title={perk.name} />
+                  <NavLink
+                    to={
+                      type === 'killer'
+                        ? '/killer-perks/' + perk.name
+                        : '/survivor-perks/' + perk.name
+                    }
+                    style={{ textDecoration: 'none' }}
+                    state={stateMap[type] ? stateMap[type](perk) : {}}
+                  >
+                    <ElementCard
+                      title={perk.name}
+                      icon={
+                        type === 'killer'
+                          ? '/images/killer-perks/' + perk.name + '.png'
+                          : '/images/surv-perks/' + perk.name + '.png'
+                      }
+                    />
+                  </NavLink>
                 </Col>
               ))
             : null}
